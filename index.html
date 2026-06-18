@@ -1,1130 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI for Founders</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #050505;
-  --bg2: #0F1115;
-  --bg3: #171A21;
-  --border: #28303B;
-  --green: #028071;
-  --blue: #5AADA2;
-  --teal: #028071;
-  --purple: #94A3B8;
-  --amber: #F59E0B;
-  --error: #F87171;
-  --white: #F8FAFC;
-  --gray: #CBD5E1;
-  --dim: #64748B;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--gray);-webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI for Founders — Session 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --surface: #111111;
+      --surface-2: #181818;
+      --text: #ffffff;
+      --muted: #b6b6b6;
+      --muted-2: #7d7d7d;
+      --accent: #f96300;
+      --accent-soft: rgba(249, 99, 0, 0.12);
+      --border: rgba(255,255,255,0.12);
+      --border-strong: rgba(249,99,0,0.42);
+      --shadow: 0 20px 50px rgba(0,0,0,0.28);
+    }
 
-/* Subtle noise texture + warm vignette */
-body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(2,128,113,.08) 0%,transparent 45%),radial-gradient(ellipse at 80% 80%,rgba(255,255,255,.025) 0%,transparent 35%);pointer-events:none;z-index:0}
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; background: var(--bg); }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(249,99,0,0.09), transparent 28%),
+        radial-gradient(circle at 78% 82%, rgba(249,99,0,0.05), transparent 26%),
+        var(--bg);
+    }
 
-/* Deck */
-.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:56px 72px 68px;z-index:1}
-.slide.active{display:flex;animation:slideReveal .5s cubic-bezier(.16,1,.3,1)}
-@keyframes slideReveal{from{opacity:0;transform:scale(.97) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-/* Staggered card entrance */
-.slide.active .card{animation:cardIn .4s cubic-bezier(.16,1,.3,1) backwards}
-.slide.active .card:nth-child(1){animation-delay:.08s}
-.slide.active .card:nth-child(2){animation-delay:.14s}
-.slide.active .card:nth-child(3){animation-delay:.2s}
-.slide.active .card:nth-child(4){animation-delay:.26s}
-.slide.active .card:nth-child(5){animation-delay:.32s}
-.slide.active .card:nth-child(6){animation-delay:.38s}
-@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 34px 40px 76px;
+      background: transparent;
+    }
 
-/* Inner container */
-.inner{max-width:880px;width:100%}
+    .slide.active {
+      display: flex;
+      animation: reveal .35s ease-out;
+    }
 
-/* ── Type scale (projection-optimized) ──
-   Display:  4.8rem  — section dividers only
-   H1:       3.4rem  — slide headlines
-   Quote:    2.2rem  — key takeaways
-   Sub:      1.5rem  — subtitles (amber, light weight = contrast with h1)
-   Body:     1.2rem  — readable from back row
-   Card:     1.1rem  — card headlines
-   Small:    .85rem  — badges, labels, meta
-   Ratio:    ~1.4 between major tiers
-*/
-h1{font-family:'JetBrains Mono',monospace;font-size:3.2rem;font-weight:800;color:var(--white);line-height:1.02;letter-spacing:.02em;margin-bottom:18px;text-transform:uppercase}
-.sub{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--teal);margin-bottom:32px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
-.lead{font-size:1.2rem;color:var(--gray);line-height:1.7;margin-bottom:24px;max-width:54ch}
-.big-quote{font-family:'JetBrains Mono',monospace;font-size:2rem;color:var(--white);font-weight:800;line-height:1.22;margin:28px 0;letter-spacing:.01em;text-transform:uppercase}
-.accent{color:var(--amber)}
-.white{color:var(--white);font-weight:500}
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-/* Cards grid */
-.cards{display:grid;gap:14px;margin:28px 0;text-align:left}
-.cards-1{grid-template-columns:1fr}
-.cards-2{grid-template-columns:1fr 1fr}
-.cards-3{grid-template-columns:1fr 1fr 1fr}
-.cards-4{grid-template-columns:1fr 1fr;max-width:720px;margin-left:auto;margin-right:auto}
-.card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01)),var(--bg2);border:1px solid var(--border);border-radius:4px;padding:22px 24px;transition:border-color .25s,transform .25s,background .25s;box-shadow:0 6px 24px rgba(0,0,0,.18)}
-.card:hover{border-color:color-mix(in srgb,var(--teal) 55%,transparent);background:color-mix(in srgb,var(--teal) 5%,var(--bg2));transform:translateY(-2px)}
-.card-icon{font-size:1.5rem;margin-bottom:8px}
-.card h3{font-family:'JetBrains Mono',monospace;font-size:1rem;color:var(--white);font-weight:800;margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase}
-.card p{font-size:.95rem;color:var(--gray);line-height:1.55}
+    .canvas {
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      min-height: calc(100vh - 110px);
+      max-height: calc(100vh - 110px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
 
-/* Minimal list */
-.items{list-style:none;display:flex;flex-direction:column;gap:14px;margin:20px 0}
-.items li{font-size:1.25rem;color:var(--gray);display:flex;align-items:center;justify-content:center;gap:12px}
-.items li .dot{width:8px;height:8px;border-radius:2px;background:var(--amber);flex-shrink:0;transform:rotate(45deg)}
+    .eyebrow {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 1;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
 
-/* Callout — tinted background instead of just border-left */
-.callout{background:linear-gradient(135deg,color-mix(in srgb,var(--amber) 6%,var(--bg2)),var(--bg2));border-radius:8px;padding:24px 28px;margin:24px auto;max-width:660px;border:1px solid color-mix(in srgb,var(--amber) 12%,transparent);position:relative}
-.callout p{font-size:1.1rem;color:var(--gray);line-height:1.65;margin:0}
-.callout-amber{border-color:color-mix(in srgb,var(--amber) 20%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--amber) 8%,var(--bg2)),var(--bg2))}
+    h1, h2, h3 {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
 
-/* Section divider */
-.slide.divider{background:linear-gradient(135deg,var(--bg2) 0%,var(--bg) 100%)}
-.divider .part-label{font-family:'Space Grotesk',sans-serif;font-size:.8rem;text-transform:uppercase;letter-spacing:.3em;color:var(--amber);font-weight:500;margin-bottom:20px}
-.divider h1{font-size:4.8rem;letter-spacing:-.045em;font-weight:700}
-.divider .sub{font-weight:300;color:var(--dim);font-size:1.3rem}
+    h1 {
+      font-size: clamp(44px, 6vw, 84px);
+      line-height: 0.92;
+      max-width: 10ch;
+    }
 
-/* Checkpoint */
-.slide.checkpoint{background:linear-gradient(160deg,rgba(0,172,71,.06) 0%,var(--bg) 60%)}
-.check-circle{width:64px;height:64px;border-radius:8px;background:rgba(0,172,71,.12);border:2px solid rgba(0,172,71,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
-.check-circle svg{width:32px;height:32px;color:var(--green)}
+    h2 {
+      font-size: clamp(31px, 3.8vw, 56px);
+      line-height: 0.95;
+      max-width: 12ch;
+    }
 
-/* Step badge */
-.badge{font-family:'JetBrains Mono',monospace;display:inline-block;padding:6px 14px;border-radius:2px;font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;margin-bottom:20px;border:1px solid}
-.badge-blue{background:rgba(45,140,255,.08);color:var(--blue);border-color:rgba(45,140,255,.2)}
-.badge-amber{background:rgba(232,145,58,.08);color:var(--amber);border-color:rgba(232,145,58,.2)}
-.badge-green{background:rgba(0,172,71,.08);color:var(--green);border-color:rgba(0,172,71,.2)}
-.badge-teal{background:rgba(20,184,166,.08);color:var(--teal);border-color:rgba(20,184,166,.2)}
+    .lede {
+      font-size: clamp(16px, 1.35vw, 21px);
+      line-height: 1.42;
+      color: var(--muted);
+      max-width: 52ch;
+    }
 
-/* Architecture diagram */
-.arch{display:flex;align-items:center;justify-content:center;gap:10px;margin:36px 0;flex-wrap:wrap}
-.node{background:var(--bg2);border:2px solid var(--border);border-radius:8px;padding:18px 24px;text-align:center;min-width:110px;transition:transform .2s}
-.node:hover{transform:translateY(-3px)}
-.node .n-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.18em;color:var(--dim);margin-bottom:6px}
-.node .n-name{font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:800;color:var(--white);letter-spacing:.06em;text-transform:uppercase}
-.node-green{border-color:var(--green)}.node-blue{border-color:var(--blue)}
-.node-teal{border-color:var(--teal)}.node-purple{border-color:var(--purple)}
-.node-emerald{border-color:#10B981}
-.arrow{color:var(--dim);font-size:1.2rem;font-family:'Space Grotesk',sans-serif}
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 8px 12px;
+      border: 1px solid var(--border-strong);
+      background: var(--accent-soft);
+      font-size: 12px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text);
+      font-weight: 600;
+      border-radius: 10px;
+    }
 
-/* About me — special left-aligned layout */
-.about-slide{text-align:left;align-items:flex-start}
-.about-inner{max-width:960px;width:100%}
-.about-inner h1{font-size:3rem}
-.about-inner .sub{font-size:1.2rem;margin-bottom:28px;font-weight:300}
-.about-row{display:flex;align-items:flex-start;gap:44px}
-.about-left{display:flex;flex-direction:column;align-items:center;gap:16px;flex-shrink:0}
-.photo{width:200px;height:200px;border-radius:12px;overflow:hidden;border:3px solid var(--amber);flex-shrink:0}
-.photo img{width:100%;height:100%;object-fit:cover}
-.brand-row{display:flex;gap:10px}
-.brand{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 14px;display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--dim);font-weight:500;font-family:'Space Grotesk',sans-serif}
-.about-right{flex:1}
-.career-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.tag{font-family:'Space Grotesk',sans-serif;display:inline-block;padding:5px 14px;border-radius:4px;font-size:.8rem;font-weight:600;background:var(--bg2);border:1px solid var(--border);color:var(--dim)}
-.tag-accent{background:rgba(232,145,58,.1);border-color:rgba(232,145,58,.25);color:var(--amber)}
-.about-list{list-style:none;margin:16px 0}
-.about-list li{font-size:1.1rem;color:var(--gray);padding-left:24px;position:relative;margin-bottom:12px;line-height:1.6}
-.about-list li::before{content:'';position:absolute;left:0;top:10px;width:8px;height:8px;border-radius:2px;background:var(--amber);transform:rotate(45deg)}
+    .hero-grid,
+    .split,
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 30px;
+      align-items: stretch;
+    }
 
-/* Group slides */
-.slide.group{background:linear-gradient(160deg,rgba(98,100,167,.07) 0%,var(--bg) 60%)}
-.group-icon{width:64px;height:64px;border-radius:8px;background:rgba(98,100,167,.12);border:2px solid rgba(98,100,167,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:1.8rem}
-.badge-purple{background:rgba(98,100,167,.08);color:var(--purple);border-color:rgba(98,100,167,.2)}
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
 
-/* Timer */
-.timer-wrap{margin-top:24px;display:flex;align-items:center;justify-content:center;gap:16px}
-.timer-btn{font-family:'Space Grotesk',sans-serif;background:var(--purple);border:none;color:#fff;padding:10px 24px;border-radius:6px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:8px;letter-spacing:.02em}
-.timer-btn:hover{background:#7678c0;transform:translateY(-1px)}
-.timer-display{font-family:'Space Grotesk',sans-serif;font-size:3.2rem;font-weight:700;color:var(--white);font-variant-numeric:tabular-nums;min-width:140px;text-align:center;display:none;letter-spacing:-.02em}
-.timer-display.active{display:block}
-.timer-controls{display:none;align-items:center;gap:8px}
-.timer-controls.active{display:flex}
-.timer-input{font-family:'Space Grotesk',sans-serif;width:56px;background:var(--bg2);border:2px solid var(--border);color:var(--white);padding:8px;border-radius:6px;font-size:1.1rem;text-align:center;font-weight:600}
-.timer-input:focus{outline:none;border-color:var(--purple)}
-.timer-label{font-size:.85rem;color:var(--dim);font-family:'Space Grotesk',sans-serif}
-.timer-start{font-family:'Space Grotesk',sans-serif;background:var(--green);border:none;color:#fff;padding:8px 20px;border-radius:6px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
-.timer-start:hover{background:#00c853;transform:translateY(-1px)}
-.timer-stop{font-family:'Space Grotesk',sans-serif;background:var(--amber);border:none;color:#000;padding:8px 16px;border-radius:6px;font-size:.9rem;font-weight:600;cursor:pointer;display:none;transition:all .2s}
-.timer-stop.active{display:inline-block}
+    .panel.dark {
+      background: linear-gradient(180deg, rgba(249,99,0,0.08), rgba(255,255,255,0.02));
+      border-color: rgba(249,99,0,0.26);
+    }
 
-/* QR slide */
-.qr-layout{display:flex;align-items:center;justify-content:center;gap:48px;margin:28px 0}
-.qr-frame{background:#fff;border-radius:10px;padding:12px;flex-shrink:0}
-.qr-frame img{width:200px;height:200px;display:block}
-.qr-right{text-align:left}
-.qr-right .lead{font-size:1.2rem}
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-/* Global branding footer */
-.branding{position:fixed;bottom:16px;left:18px;display:flex;align-items:center;gap:8px;z-index:100;background:rgba(15,17,21,.48);border:1px solid rgba(40,48,59,.42);border-radius:4px;padding:7px 12px 7px 9px;cursor:pointer;text-decoration:none;transition:all .3s;box-shadow:0 8px 24px rgba(0,0,0,.14);opacity:.42;backdrop-filter:blur(6px)}
-.branding:hover{border-color:var(--teal);background:color-mix(in srgb,var(--teal) 7%,var(--bg2));transform:translateY(-2px)}
-.branding-logo{width:30px;height:30px;border-radius:6px;overflow:hidden;flex-shrink:0}
-.branding-logo img{width:100%;height:100%;object-fit:cover}
-.branding-text{display:flex;flex-direction:column;line-height:1.25}
-.branding-name{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:800;color:var(--white);letter-spacing:.08em;text-transform:uppercase}
-.branding-tagline{font-family:'JetBrains Mono',monospace;font-size:.56rem;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
+    .metric {
+      display: grid;
+      grid-template-columns: 50px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 10px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .metric:first-child { border-top: none; padding-top: 0; }
 
-/* Progress */
-.progress{position:fixed;bottom:0;left:0;height:2px;background:linear-gradient(90deg,var(--white),var(--teal));transition:width .4s cubic-bezier(.16,1,.3,1);z-index:100}
-.counter{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);font-size:.75rem;color:var(--dim);z-index:100;font-family:'Space Grotesk',sans-serif;letter-spacing:.06em}
-.nav{position:fixed;bottom:12px;right:24px;display:flex;gap:6px;z-index:100;opacity:.25;transition:opacity .3s}
-.nav:hover{opacity:1}
-.nav button{font-family:'Space Grotesk',sans-serif;background:var(--bg2);border:2px solid var(--border);color:var(--gray);width:38px;height:38px;border-radius:6px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.nav button:hover{background:var(--bg3);color:var(--white);border-color:var(--dim);transform:translateY(-1px)}
+    .metric-num {
+      font-family: 'Barlow', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--accent);
+    }
 
-/* Timeline */
-.timeline{display:flex;gap:0;margin:32px auto;max-width:760px;position:relative}
-.timeline::before{content:'';position:absolute;top:22px;left:0;right:0;height:2px;background:var(--border)}
-.tl-block{flex:1;position:relative;text-align:left;padding-top:36px}
-.tl-block::before{content:'';position:absolute;top:16px;left:0;width:12px;height:12px;border-radius:3px;background:var(--bg);border:2px solid var(--amber);transform:rotate(45deg);z-index:1}
-.tl-block:nth-child(2)::before{border-color:var(--blue);left:50%;margin-left:-6px}
-.tl-block:nth-child(3)::before{border-color:var(--green);left:auto;right:0}
-.tl-block:nth-child(2){text-align:center}
-.tl-block:nth-child(3){text-align:right}
-.tl-time{font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:700;color:var(--dim);letter-spacing:.06em;margin-bottom:6px}
-.tl-label{font-family:'Space Grotesk',sans-serif;font-size:.7rem;text-transform:uppercase;letter-spacing:.15em;font-weight:500;margin-bottom:2px}
-.tl-title{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:var(--white);margin-bottom:4px}
-.tl-desc{font-size:.9rem;color:var(--gray);line-height:1.4}
+    .metric p,
+    .panel p,
+    .card p,
+    .list li,
+    .mini {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.42;
+    }
 
-/* Title slide — hero moment */
-.slide:first-child{background:radial-gradient(ellipse at 50% 60%,rgba(232,145,58,.06) 0%,transparent 60%)}
-.slide:first-child h1{font-size:4.2rem;letter-spacing:-.04em}
-.slide:first-child .sub{font-size:1.6rem;font-weight:300}
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
 
-/* Syllabus slide */
-.syllabus-slide{align-items:flex-start;text-align:left;padding:56px 72px 72px}
-.syllabus-inner{max-width:1080px;width:100%}
-.syllabus-slide h1{font-size:3.5rem;letter-spacing:-.04em;text-transform:none;margin-bottom:56px}
-.accent-line{width:72px;height:10px;background:#d9ff3f;margin-bottom:64px}
-.syllabus-week{font-family:'Inter',sans-serif;font-size:1.7rem;font-weight:700;color:var(--white);line-height:1.3;margin-bottom:44px}
-.syllabus-session{font-family:'Inter',sans-serif;font-size:1.55rem;font-weight:700;color:var(--white);line-height:1.35;margin-bottom:10px}
-.syllabus-list{margin:0 0 0 28px;padding-left:28px;max-width:1100px}
-.syllabus-list li{font-size:1.45rem;color:var(--white);line-height:1.45;margin-bottom:10px}
+    .cards.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
-/* Slide accent line — top edge glow */
-.slide.checkpoint::before,.slide.group::before,.slide.divider::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;z-index:2}
-.slide.checkpoint::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
-.slide.group::before{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
-.slide.divider::before{background:linear-gradient(90deg,transparent,var(--amber),transparent)}
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      min-height: 116px;
+    }
 
-/* Responsive */
-@media(max-width:768px){
-  .slide{padding:28px 24px 52px}
-  h1{font-size:2.2rem}.divider h1{font-size:2.8rem}
-  .sub{font-size:1.05rem}.lead{font-size:1.05rem}
-  .cards-2,.cards-3{grid-template-columns:1fr}
-  .cards-4{grid-template-columns:1fr}
-  .arch{flex-direction:column}.arrow{transform:rotate(90deg)}
-  .about-row{flex-direction:column}
-  .qr-layout{flex-direction:column}
-  .brand-row{justify-content:center}
-}
-</style>
+    .card h3 {
+      font-size: 21px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .label {
+      display: inline-block;
+      margin-bottom: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .quote {
+      font-family: 'Barlow', sans-serif;
+      font-size: clamp(30px, 3.4vw, 50px);
+      line-height: 1.02;
+      text-transform: uppercase;
+      font-weight: 800;
+      max-width: 14ch;
+    }
+
+    .list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .bullet {
+      width: 10px;
+      height: 10px;
+      margin-top: 7px;
+      background: var(--accent);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    .big-line {
+      width: 84px;
+      height: 8px;
+      background: var(--accent);
+    }
+
+    .rail {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rail-step {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: var(--surface);
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .rail-step .n {
+      font-family: 'Barlow', sans-serif;
+      font-size: 26px;
+      line-height: 1;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .rail-step h3 {
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    .logic {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .logic .node {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px;
+      min-height: 118px;
+    }
+
+    .logic .node strong {
+      display: block;
+      font-family: 'Barlow', sans-serif;
+      font-size: 18px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .logic .node p { color: var(--muted); font-size: 13px; line-height: 1.28; }
+
+    .footer-note {
+      font-size: 14px;
+      color: var(--muted-2);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, #ffffff, var(--accent));
+      z-index: 20;
+      transition: width .25s ease;
+    }
+
+    .counter {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      color: var(--muted-2);
+      font-size: 13px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      display: flex;
+      gap: 8px;
+      z-index: 20;
+    }
+
+    .nav button {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(17,17,17,0.9);
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .nav button:hover {
+      border-color: var(--border-strong);
+      background: rgba(34,34,34,0.95);
+    }
+
+    .slide-hero .canvas { gap: 32px; }
+    .slide-hero .lede { max-width: 40ch; }
+    .slide-hero .panel { align-self: stretch; }
+
+    @media (max-width: 980px) {
+      .slide { padding: 32px 24px 86px; }
+      .canvas { min-height: calc(100vh - 118px); max-height: calc(100vh - 118px); gap: 20px; }
+      .hero-grid, .split, .two-col, .cards.three, .logic { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: 1fr; }
+      h1 { max-width: none; }
+      h2 { max-width: none; }
+    }
+  </style>
 </head>
 <body>
-
-<!-- ======== SLIDE 1: TITLE ======== -->
-<div class="slide">
-  <h1>AI for Founders</h1>
-  <div class="sub">A practical workshop for founder leverage</div>
-  <p class="big-quote">Understand &rarr; Set Up &rarr; Launch &rarr; <span class="accent">Connect</span></p>
-  <p class="lead">No programming experience required</p>
-</div>
-
-<!-- ======== TODAY'S SESSION: AI FOR FOUNDERS ======== -->
-<div class="slide syllabus-slide">
-  <div class="syllabus-inner">
-    <h1>AI for Founders | Syllabus</h1>
-    <div class="accent-line"></div>
-    <div class="syllabus-week">Week 1 &mdash; Make AI understand your business</div>
-    <div class="syllabus-session">Session 1 &middot; Where AI gives founder leverage</div>
-    <ul class="syllabus-list">
-      <li>Map where founder time is leaking today.</li>
-      <li>Identify bottlenecks in writing, decisions, sales, and communication.</li>
-      <li>Choose the highest-leverage use cases for the business.</li>
-    </ul>
-  </div>
-</div>
-
-<!-- ======== HOW TODAY WORKS ======== -->
-<div class="slide">
-  <h1>How Today Works</h1>
-  <div class="sub">3 hours &middot; 3 parts &middot; 1 working agent</div>
-  <div class="timeline">
-    <div class="tl-block">
-      <div class="tl-time">45 min + break</div>
-      <div class="tl-content">
-        <div class="tl-label" style="color:var(--amber)">Part 1</div>
-        <div class="tl-title">Understanding Agents</div>
-        <div class="tl-desc">What agents are, how the system works, why Hermes</div>
-      </div>
-    </div>
-    <div class="tl-block">
-      <div class="tl-time">45 min + break</div>
-      <div class="tl-content">
-        <div class="tl-label" style="color:var(--blue)">Part 2</div>
-        <div class="tl-title">Hands-On Setup</div>
-        <div class="tl-desc">7 steps in groups. Server &rarr; SSH &rarr; Hermes &rarr; Agent</div>
-      </div>
-    </div>
-    <div class="tl-block">
-      <div class="tl-time">45 min</div>
-      <div class="tl-content">
-        <div class="tl-label" style="color:var(--green)">Part 3</div>
-        <div class="tl-title">Free Build + Demos</div>
-        <div class="tl-desc">Build your idea. Show what you made. Contest winner.</div>
-      </div>
-    </div>
-  </div>
-  <p class="lead" style="margin-top:24px;color:var(--dim)">2 breaks &middot; Group work at tables &middot; AI assistant open &middot; Demos at the end</p>
-</div>
-
-<!-- ======== SLIDE 2: ABOUT ME ======== -->
-<div class="slide about-slide">
-  <div class="about-inner">
-    <h1>Aram Shakhbandaryan</h1>
-    <div class="sub">Building Empy — Real-Time AI Coach for Sales Calls</div>
-    <div class="about-row">
-      <div class="about-left">
-        <div class="photo"><img src="aram-photo.jpg" alt="Aram"></div>
-        <div class="brand-row">
-          <div class="brand">
-            <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09A6.97 6.97 0 0 1 5.48 12c0-.72.13-1.43.36-2.09V7.07H2.18A11.96 11.96 0 0 0 .96 12c0 1.94.46 3.77 1.22 5.33l3.66-2.84z" fill="#FBBC05"/><path d="M12 4.75c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.09 14.97 0 12 0 7.7 0 3.99 2.47 2.18 6.07l3.66 2.84c.87-2.6 3.3-4.16 6.16-4.16z" fill="#EA4335"/></svg>
-            ex-Google
+  <div class="deck">
+    <section class="slide slide-hero active" data-title="Title">
+      <div class="canvas">
+        <div class="eyebrow">AI FOR FOUNDERS · SESSION 1</div>
+        <div class="hero-grid">
+          <div class="stack" style="justify-content:center;">
+            <div class="big-line"></div>
+            <h1>Where AI gives founder leverage</h1>
+            <p class="lede">A working map for founders who feel the shift, know AI matters, and want to see where it creates real leverage.</p>
+            <div class="kicker">Opportunity first · systems over hacks</div>
           </div>
-          <div class="brand">
-            <svg width="18" height="14" viewBox="0 0 24 18" fill="var(--gray)"><path d="M12 0L9 5.2 6 10.4h4l2-3.5 2 3.5h4L15 5.2 12 0zM4 13L1 18h6l-3-5zM12 13l-3 5h6l-3-5zM20 13l-3 5h6l-3-5z"/></svg>
-            ex-Adidas
+          <div class="panel dark stack">
+            <div class="metric">
+              <div class="metric-num">01</div>
+              <div>
+                <p><strong style="color:#fff;">Founders are early</strong><br>because they feel the pressure and the upside first.</p>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-num">02</div>
+              <div>
+                <p><strong style="color:#fff;">Prompting is not the point</strong><br>the real unlock is workflow design and systems.</p>
+              </div>
+            </div>
+            <div class="metric">
+              <div class="metric-num">03</div>
+              <div>
+                <p><strong style="color:#fff;">Agentic workflows matter</strong><br>because they change how operators execute, not just how they write.</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="about-right">
-        <div class="career-tags">
-          <span class="tag tag-accent">Founder @ Empy.ai</span>
-          <span class="tag">Draper University</span>
-          <span class="tag">Krisp</span>
-          <span class="tag">HSE — Psychotherapy</span>
+    </section>
+
+    <section class="slide" data-title="Why now">
+      <div class="canvas">
+        <div class="eyebrow">The shift</div>
+        <h2>AI is not another software tool</h2>
+        <div class="two-col">
+          <div class="panel">
+            <p class="quote">It changes how work gets done.</p>
+          </div>
+          <div class="panel stack">
+            <p>Founders are not reacting to a trend. They are reacting to a new operating layer.</p>
+            <ul class="list">
+              <li><span class="bullet"></span><span>Information work is getting compressed.</span></li>
+              <li><span class="bullet"></span><span>Execution speed is becoming a competitive advantage again.</span></li>
+              <li><span class="bullet"></span><span>The teams that learn this early will compound faster.</span></li>
+            </ul>
+          </div>
         </div>
-        <p class="lead" style="text-align:left">I build AI agents that solve real problems — not demos, <span class="white">production systems</span>.</p>
-        <ul class="about-list">
-          <li><span class="white">15+ production agents</span> shipped in 6 months</li>
-          <li>3 backend revisions: monolith &rarr; event-driven &rarr; memory</li>
-          <li>Real-time AI coaching with sub-3s latency</li>
-        </ul>
-        <div class="callout" style="text-align:left"><p>Today I am not teaching theory.<br>I am showing you how to <span class="white">build and run your first agent</span>.</p></div>
       </div>
-    </div>
-  </div>
-</div>
+    </section>
 
-<!-- ======== SLIDE 3: AGENTIC EVN + QR ======== -->
-<div class="slide">
-  <div class="inner">
-    <h1>Agentic EVN</h1>
-    <div class="sub">Ship agents, not prompts.</div>
-    <div class="qr-layout">
-      <div class="qr-frame">
-        <img src="qr-agentic-evn.png" alt="Join Agentic EVN">
-      </div>
-      <div class="qr-right">
-        <p class="big-quote">Scan &rarr; Join &rarr; Build</p>
-        <div class="cards cards-1" style="margin:16px 0;text-align:left">
-          <div class="card" style="border-color:var(--green);padding:16px 20px"><h3>Not a chat about AI.</h3><p>A builder community. We ship autonomous systems, not prompts.</p></div>
+    <section class="slide" data-title="Audience">
+      <div class="canvas">
+        <div class="eyebrow">Who this is for</div>
+        <h2>Not everyone needs to go deep right now</h2>
+        <div class="cards">
+          <div class="card">
+            <span class="label">This course is for</span>
+            <h3>Curious founders</h3>
+            <p>People who already feel the AI pull and want more than generic chat usage.</p>
+          </div>
+          <div class="card">
+            <span class="label">This course is for</span>
+            <h3>Urgent operators</h3>
+            <p>People who sense that this is becoming core to how companies research, decide, and ship.</p>
+          </div>
+          <div class="card">
+            <span class="label">This course is for</span>
+            <h3>People willing to go deep</h3>
+            <p>People ready to learn workflows, systems, and agentic thinking.</p>
+          </div>
+          <div class="card">
+            <span class="label">Industry is secondary</span>
+            <h3>Mindset is primary</h3>
+            <p>The key filter is not sector. It is readiness to rethink how work happens.</p>
+          </div>
         </div>
-        <ul class="items" style="align-items:flex-start">
-          <li><span class="dot"></span>Architecture patterns &amp; multi-agent orchestration</li>
-          <li><span class="dot"></span>Debugging, frameworks, real technical support</li>
-          <li><span class="dot"></span>Show &amp; Tell: demos, repos, working agents</li>
-        </ul>
       </div>
+    </section>
+
+    <section class="slide" data-title="Why founders care">
+      <div class="canvas">
+        <div class="eyebrow">Founder psychology</div>
+        <h2>Why founders feel this first</h2>
+        <div class="split">
+          <div class="panel stack">
+            <p class="quote">Because the upside and the downside both hit them early.</p>
+          </div>
+          <div class="rail">
+            <div class="rail-step">
+              <div class="n">01</div>
+              <div>
+                <h3>FOMO is rational</h3>
+                <p>When an execution layer changes, waiting has a cost.</p>
+              </div>
+            </div>
+            <div class="rail-step">
+              <div class="n">02</div>
+              <div>
+                <h3>Curiosity is strategic</h3>
+                <p>The right experiments today become leverage tomorrow.</p>
+              </div>
+            </div>
+            <div class="rail-step">
+              <div class="n">03</div>
+              <div>
+                <h3>Depth will separate people</h3>
+                <p>Surface-level AI use will be common. Systems thinking will not.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Leverage map">
+      <div class="canvas">
+        <div class="eyebrow">Leverage map</div>
+        <h2>Where AI gives founder leverage</h2>
+        <div class="cards three">
+          <div class="card">
+            <h3>Research</h3>
+            <p>Faster market understanding, faster synthesis, faster option generation.</p>
+          </div>
+          <div class="card">
+            <h3>Writing</h3>
+            <p>Clearer messaging, faster iteration, better leverage across sales, fundraising, and hiring.</p>
+          </div>
+          <div class="card">
+            <h3>Analysis</h3>
+            <p>Stronger thinking loops, clearer comparisons, better decisions under uncertainty.</p>
+          </div>
+          <div class="card">
+            <h3>Execution</h3>
+            <p>Turning vague work into repeatable workflows that can be run again and improved.</p>
+          </div>
+          <div class="card">
+            <h3>Ops</h3>
+            <p>Less manual coordination, less fragmented context, better follow-through.</p>
+          </div>
+          <div class="card">
+            <h3>Learning velocity</h3>
+            <p>The faster you turn questions into experiments, the faster the company compounds.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Not just prompting">
+      <div class="canvas">
+        <div class="eyebrow">The mistake</div>
+        <h2>Most people stop at prompting</h2>
+        <div class="two-col">
+          <div class="panel">
+            <span class="label">What most people do</span>
+            <p class="quote">Ask once. Get output. Start over tomorrow.</p>
+          </div>
+          <div class="panel dark">
+            <span class="label">What serious operators do</span>
+            <ul class="list">
+              <li><span class="bullet"></span><span>Define repeatable workflows.</span></li>
+              <li><span class="bullet"></span><span>Keep context and memory.</span></li>
+              <li><span class="bullet"></span><span>Improve instructions over time.</span></li>
+              <li><span class="bullet"></span><span>Turn one-off wins into systems.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Agentic workflows">
+      <div class="canvas">
+        <div class="eyebrow">Agentic workflows</div>
+        <h2>Agentic workflows are where things get interesting</h2>
+        <div class="logic">
+          <div class="node">
+            <span class="label">Level 1</span>
+            <strong>Prompt</strong>
+            <p>You ask for one output.</p>
+          </div>
+          <div class="node">
+            <span class="label">Level 2</span>
+            <strong>Workflow</strong>
+            <p>You define a repeatable sequence.</p>
+          </div>
+          <div class="node">
+            <span class="label">Level 3</span>
+            <strong>Agent</strong>
+            <p>The system can act across tools and context.</p>
+          </div>
+          <div class="node">
+            <span class="label">Level 4</span>
+            <strong>System</strong>
+            <p>Knowledge, tools, memory, and routines start compounding.</p>
+          </div>
+        </div>
+        <p class="lede" style="max-width:62ch;">The jump from chat to agent is not cosmetic. It changes what work can be delegated, repeated, and improved.</p>
+      </div>
+    </section>
+
+    <section class="slide" data-title="System thinking">
+      <div class="canvas">
+        <div class="eyebrow">Real unlock</div>
+        <h2>The real unlock is not better answers. It is better systems.</h2>
+        <div class="split">
+          <div class="panel stack">
+            <p>AI becomes infrastructure for thinking and execution when it stops being a toy.</p>
+          </div>
+          <div class="panel">
+            <ul class="list">
+              <li><span class="bullet"></span><span>One place for recurring context.</span></li>
+              <li><span class="bullet"></span><span>Reusable workflows instead of repeated effort.</span></li>
+              <li><span class="bullet"></span><span>Clearer standards for what good output looks like.</span></li>
+              <li><span class="bullet"></span><span>Faster execution without losing judgment.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Behavior change">
+      <div class="canvas">
+        <div class="eyebrow">Behavior change</div>
+        <h2>What changes for the founder</h2>
+        <div class="cards">
+          <div class="card">
+            <h3>From doing everything</h3>
+            <p>to deciding what should become a workflow.</p>
+          </div>
+          <div class="card">
+            <h3>From asking better questions</h3>
+            <p>to designing better operating loops.</p>
+          </div>
+          <div class="card">
+            <h3>From output obsession</h3>
+            <p>to system quality obsession.</p>
+          </div>
+          <div class="card">
+            <h3>From random experiments</h3>
+            <p>to deliberate compounding capability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="What this session does">
+      <div class="canvas">
+        <div class="eyebrow">Session outcome</div>
+        <h2>What this first session is meant to do</h2>
+        <div class="two-col">
+          <div class="panel dark stack">
+            <p class="quote">Give you the mental model before the tools.</p>
+          </div>
+          <div class="panel">
+            <ul class="list">
+              <li><span class="bullet"></span><span>Understand why this matters now.</span></li>
+              <li><span class="bullet"></span><span>See where AI creates founder leverage.</span></li>
+              <li><span class="bullet"></span><span>Understand why agentic workflows matter.</span></li>
+              <li><span class="bullet"></span><span>Start thinking in systems, not prompts.</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Closing">
+      <div class="canvas">
+        <div class="eyebrow">Closing thought</div>
+        <h2>This is not about becoming an AI expert</h2>
+        <div class="panel dark stack" style="max-width:980px;">
+          <p class="quote" style="max-width:none;">It is about becoming a founder who can build leverage faster than before.</p>
+          <p class="lede" style="max-width:56ch;">If you learn to turn questions into workflows and workflows into systems, AI stops being content help and starts becoming operating power.</p>
+          <div class="footer-note">AI for Founders · built in ACA presentation language</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="progress" id="progress"></div>
+    <div class="counter" id="counter">1 / 11</div>
+    <div class="nav">
+      <button id="prev" aria-label="Previous slide">‹</button>
+      <button id="next" aria-label="Next slide">›</button>
     </div>
   </div>
-</div>
 
-<!-- ======== SLIDE 4: OUTCOMES ======== -->
-<div class="slide">
-  <h1>By the End of Today</h1>
-  <div class="sub">You will have</div>
-  <ul class="items">
-    <li><span class="dot"></span>A <span class="white">cloud server</span> — your own remote machine</li>
-    <li><span class="dot"></span><span class="white">Hermes</span> — installed and configured</li>
-    <li><span class="dot"></span>A <span class="white">Telegram bot</span> — connected channel</li>
-    <li><span class="dot"></span>A <span class="white">working agent</span> — responding to you</li>
-  </ul>
-</div>
-
-<!-- ======== INTERACTIVE: WHAT DO YOU WANT TO BUILD ======== -->
-<div class="slide">
-  <div class="badge badge-green">Interactive</div>
-  <h1>What Do You Want to Build?</h1>
-  <div class="sub">Raise your hand. Tell the room.</div>
-  <p class="big-quote">A personal assistant? A business tool?<br>Research? Automation? <span class="accent">Something weird?</span></p>
-  <div class="callout"><p>No wrong answers. Your idea is your <span class="white">free build project</span> at the end of the workshop.</p></div>
-</div>
-
-<!-- ======== SECTION: UNDERSTANDING AGENTS ======== -->
-<div class="slide divider">
-  <div class="part-label">Part 1</div>
-  <h1>Understanding Agents</h1>
-  <div class="sub" style="color:var(--dim)">What they are and how the system works</div>
-</div>
-
-<!-- ======== SLIDE 6: WHAT IS AN AGENT ======== -->
-<div class="slide">
-  <h1>What Is an AI Agent?</h1>
-  <div class="sub">More than a chatbot</div>
-  <div class="cards cards-2" style="max-width:640px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--dim)"><div class="card-icon">&#128172;</div><h3>Chatbot</h3><p>You ask &rarr; it answers</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#9889;</div><h3>Agent</h3><p>Gets a task &rarr; uses tools &rarr; delivers results</p></div>
-  </div>
-  <p class="big-quote">A chatbot talks. An agent <span class="accent">works</span>.</p>
-</div>
-
-<!-- ======== SLIDE 7: AGENT VS CHATGPT ======== -->
-<div class="slide">
-  <h1>Agent vs ChatGPT</h1>
-  <div class="sub">A different category</div>
-  <div class="cards cards-2" style="max-width:640px;margin-left:auto;margin-right:auto">
-    <div class="card"><div class="card-icon">&#128221;</div><h3>ChatGPT</h3><p>Can help <em>draft</em> a message</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#128640;</div><h3>Agent</h3><p>Drafts it, organizes it, and <strong style="color:var(--green)">sends it</strong></p></div>
-  </div>
-  <p class="lead" style="margin-top:28px">This changes what AI can do for <span class="white">real work</span>.</p>
-</div>
-
-<!-- ======== SLIDE 8: WHERE AGENTS ARE USEFUL ======== -->
-<div class="slide">
-  <h1>Where Agents Are Useful</h1>
-  <div class="sub">Real examples, not hype</div>
-  <ul class="items">
-    <li><span class="dot"></span>A Telegram assistant that helps you <span class="white">reply faster</span></li>
-    <li><span class="dot"></span>A research agent that <span class="white">summarizes information</span></li>
-    <li><span class="dot"></span>A workflow agent that <span class="white">organizes your tasks</span></li>
-    <li><span class="dot"></span>A business agent that <span class="white">follows a defined process</span></li>
-  </ul>
-  <p class="big-quote">A small agent with one useful job &gt; complex system with no clear use case.</p>
-</div>
-
-<!-- ======== SLIDE 9: WHAT WE BUILD ======== -->
-<div class="slide">
-  <h1>What We Build Today</h1>
-  <div class="sub">A simple first agent</div>
-  <p class="lead">A Hermes agent with a clear role, a usable interface, connected to Telegram.</p>
-  <p class="big-quote">First win, <span class="accent">not</span> complexity.</p>
-</div>
-
-<!-- ======== SLIDE 10: ARCHITECTURE ======== -->
-<div class="slide">
-  <h1>How the System Works</h1>
-  <div class="sub">The simplest mental model</div>
-  <div class="arch">
-    <div class="node node-green"><div class="n-label">You</div><div class="n-name">Instructions</div></div>
-    <div class="arrow">&rarr;</div>
-    <div class="node node-blue"><div class="n-label">Channel</div><div class="n-name">Telegram</div></div>
-    <div class="arrow">&rarr;</div>
-    <div class="node node-teal"><div class="n-label">Platform</div><div class="n-name">Hermes</div></div>
-    <div class="arrow">&rarr;</div>
-    <div class="node node-purple"><div class="n-label">AI Model</div><div class="n-name">Claude / GPT</div></div>
-    <div class="arrow">&rarr;</div>
-    <div class="node node-emerald"><div class="n-label">Output</div><div class="n-name">Response</div></div>
-  </div>
-  <div class="callout"><p>Understand this flow and the rest becomes easy.</p></div>
-</div>
-
-<!-- ======== SLIDE 11: WHAT IS A SERVER ======== -->
-<div class="slide">
-  <h1>What Is a Server?</h1>
-  <div class="sub">A machine that runs Hermes 24/7</div>
-  <p class="big-quote">The place where your agent <span class="accent">lives</span></p>
-  <p class="lead">Online 24/7. A stable home for your agent. Not your laptop — a separate machine you can break and rebuild.</p>
-</div>
-
-<!-- ======== SLIDE 12: WHAT OPENCLAW DOES ======== -->
-<div class="slide">
-  <h1>What Hermes Does</h1>
-  <div class="sub">The operating environment</div>
-  <div class="cards cards-2" style="max-width:560px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#129504;</div><h3>AI Model</h3><p>The brain</p></div>
-    <div class="card" style="border-color:var(--teal)"><div class="card-icon">&#9881;&#65039;</div><h3>Hermes</h3><p>The agent system that makes the model usable</p></div>
-  </div>
-  <p class="lead" style="margin-top:24px">Configuration &middot; Channels &middot; Runtime &middot; Tools</p>
-</div>
-
-<!-- ======== NOT ONLY OPENCLAW ======== -->
-<div class="slide">
-  <h1>Hermes Is Not the Only Way</h1>
-  <div class="sub">Other ways to build agents</div>
-  <div class="cards cards-3" style="max-width:720px;margin-left:auto;margin-right:auto">
-    <div class="card"><div class="card-icon">&#128279;</div><h3>n8n</h3><p>Visual workflow automation. Drag-and-drop agent pipelines. Great for no-code builders.</p></div>
-    <div class="card"><div class="card-icon">&#129302;</div><h3>Claude Code</h3><p>Anthropic's CLI agent. Lives in your terminal. Writes code, runs commands, ships PRs.</p></div>
-    <div class="card"><div class="card-icon">&#128187;</div><h3>Custom Code</h3><p>LangChain, CrewAI, AutoGen — frameworks for developers who want full control.</p></div>
-    <div class="card"><div class="card-icon">&#128640;</div><h3>Zapier AI</h3><p>Connects 5000+ apps. Simple automations with AI steps. Business-friendly.</p></div>
-    <div class="card"><div class="card-icon">&#129504;</div><h3>GPTs / Gems</h3><p>Custom agents inside ChatGPT or Gemini. No server needed. Limited but fast to start.</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#9881;&#65039;</div><h3>Hermes</h3><p>Open-source, provider-agnostic, runs in terminal and messaging. What we use today.</p></div>
-  </div>
-  <div class="callout"><p>Agents are a <span class="white">category</span>, not a single product. We chose Hermes for today — but the skills you learn apply everywhere.</p></div>
-</div>
-
-<!-- ======== SLIDE 13: WHERE INTELLIGENCE COMES FROM ======== -->
-<div class="slide">
-  <h1>Where the Intelligence<br>Comes From</h1>
-  <div class="sub">Hermes + Model = Agent</div>
-  <div class="cards cards-3" style="max-width:720px;margin-left:auto;margin-right:auto">
-    <div class="card"><div class="card-icon">&#128736;&#65039;</div><h3>Hermes</h3><p>Tools, memory &amp; execution</p></div>
-    <div class="card"><div class="card-icon">&#129504;</div><h3>Model</h3><p>Reasoning &amp; language</p></div>
-    <div class="card"><div class="card-icon">&#128221;</div><h3>Your Prompts</h3><p>Role &amp; behavior</p></div>
-  </div>
-  <p class="lead">A good agent = model + <span class="white">system around it</span>.</p>
-</div>
-
-<!-- ======== OPENCLAW: THE STORY ======== -->
-<div class="slide">
-  <h1>Hermes</h1>
-  <div class="sub">Open-source AI agent framework by Nous Research</div>
-  <div class="cards cards-3" style="max-width:720px;margin-left:auto;margin-right:auto">
-    <div class="card"><div class="card-icon">&#128187;</div><h3>Terminal + Gateway</h3><p>Runs in your terminal, messaging apps, and IDE-style workflows.</p></div>
-    <div class="card"><div class="card-icon">&#128172;</div><h3>Multi-Platform</h3><p>Telegram, Discord, Slack, WhatsApp, Signal, Email and more.</p></div>
-    <div class="card"><div class="card-icon">&#127793;</div><h3>Open + Extensible</h3><p>Profiles, plugins, MCP, cron jobs, memory, and custom skills.</p></div>
-  </div>
-  <div class="callout"><p>Hermes turns an AI model into a <span class="white">working system</span> with tools, memory, channels, and reusable skills.</p></div>
-</div>
-
-<!-- ======== OPENCLAW: WHY THE HYPE ======== -->
-<div class="slide">
-  <h1>Why Hermes Is Different</h1>
-  <div class="sub">What makes it powerful in practice</div>
-  <div class="cards cards-2" style="max-width:640px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--teal)"><div class="card-icon">&#129504;</div><h3>Model-Agnostic</h3><p>Works with OpenRouter, Anthropic, OpenAI, DeepSeek, local models, and more.</p></div>
-    <div class="card" style="border-color:var(--teal)"><div class="card-icon">&#128172;</div><h3>23+ Channels</h3><p>One agent can live in Telegram, Discord, Slack, WhatsApp, Email, and more.</p></div>
-    <div class="card" style="border-color:var(--teal)"><div class="card-icon">&#128736;&#65039;</div><h3>100+ Skills</h3><p>Skills let Hermes learn workflows over time. Tools cover shell, files, browser, search, cron, and more.</p></div>
-    <div class="card" style="border-color:var(--teal)"><div class="card-icon">&#127968;</div><h3>Self-Hosted</h3><p>Profiles and self-hosting give you control over behavior, context, and data.</p></div>
-  </div>
-  <div class="callout"><p>The point is not one viral demo. The point is a practical agent stack you can actually configure, run, and extend.</p></div>
-</div>
-
-<!-- ======== OPENCLAW: WHAT IT CAN DO ======== -->
-<div class="slide">
-  <h1>What Hermes Can Do</h1>
-  <div class="sub">The full picture</div>
-  <div class="cards cards-3" style="max-width:720px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#128187;</div><h3>Write Code</h3><p>Writes, tests, fixes bugs, reviews code, submits PRs</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#127760;</div><h3>Browse Web</h3><p>Searches, browses, fills forms, and extracts data</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#128193;</div><h3>File System</h3><p>Reads/writes files, runs commands, manages processes</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#128269;</div><h3>Research</h3><p>Researches topics, summarizes findings, drafts reports</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#128268;</div><h3>Persistent Memory</h3><p>Remembers context, preferences, and reusable workflows across sessions</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#127912;</div><h3>Generate Media</h3><p>Runs on Telegram and other channels, with voice, media, cron, and automations</p></div>
-  </div>
-</div>
-
-<!-- ======== OPENCLAW: LIMITATIONS ======== -->
-<div class="slide">
-  <h1>Hermes: Limitations</h1>
-  <div class="sub">Be aware of these</div>
-  <div class="cards cards-2" style="max-width:640px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--amber)"><div class="card-icon">&#9888;&#65039;</div><h3>Technical Barrier</h3><p>Setup, config, and debugging still require care. Not a click-and-go toy.</p></div>
-    <div class="card" style="border-color:var(--amber)"><div class="card-icon">&#128274;</div><h3>Security Risks</h3><p>It can touch files, shell, and external tools. Permissions need to be thought through.</p></div>
-    <div class="card" style="border-color:var(--amber)"><div class="card-icon">&#9000;&#65039;</div><h3>Server Required</h3><p>For a stable always-on setup, a server is still the cleanest path.</p></div>
-    <div class="card" style="border-color:var(--amber)"><div class="card-icon">&#128293;</div><h3>Fast-Moving</h3><p>Fast-moving ecosystem. Bad prompts, bad configs, or bad skills still create bad outcomes.</p></div>
-  </div>
-  <div class="callout callout-amber"><p>Real trade-offs. We chose Hermes because for today's goal — <span class="white">shipping your first agent</span> — it gives the most practical control.</p></div>
-</div>
-
-<!-- ======== BREAK 1 ======== -->
-<div class="slide" style="background:var(--bg2)">
-  <div style="font-size:4rem;margin-bottom:20px">&#9749;</div>
-  <h1>Break</h1>
-  <div class="sub">Part 1 done</div>
-  <p class="lead">You now understand what agents are, how the system works, and what Hermes does.</p>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-brk1"><input type="number" class="timer-input" id="ti-brk1" value="10" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer('brk1')">Start</button></div><div class="timer-display" id="td-brk1"></div><button class="timer-btn" id="tb-brk1" onclick="openTimer('brk1')">&#9202; 10 min</button><button class="timer-stop" id="ts-brk1" onclick="stopTimer('brk1')">Stop</button></div>
-  <div class="callout" style="margin-top:28px"><p>Next up: contest, tools setup, and <span class="white">building your first agent</span>.</p></div>
-</div>
-
-<!-- ======== CONTEST ======== -->
-<div class="slide">
-  <div class="badge badge-amber">Contest</div>
-  <h1>Win 1 Hour of Free Consulting</h1>
-  <div class="sub">1-on-1 with Aram</div>
-  <div class="cards cards-3" style="max-width:720px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--amber)">
-      <div class="card-icon">&#128247;</div>
-      <h3>1. Take a Photo</h3>
-      <p>Snap a pic at the workshop. You in it, the vibe, the screen — anything real.</p>
-    </div>
-    <div class="card" style="border-color:var(--amber)">
-      <div class="card-icon">&#128225;</div>
-      <h3>2. Post It</h3>
-      <p>Share on Instagram.<br>Tag <strong style="color:var(--amber)">@aram_shakhbandaryan</strong></p>
-    </div>
-    <div class="card" style="border-color:var(--amber)">
-      <div class="card-icon">&#127942;</div>
-      <h3>3. Win</h3>
-      <p><strong style="color:var(--green)">1 hour free consulting</strong> — AI agents, product, architecture. 1-on-1 with Aram.</p>
-    </div>
-  </div>
-  <div class="callout" style="border-color:color-mix(in srgb,var(--green) 25%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--green) 8%,var(--bg2)),var(--bg2));max-width:720px;margin-top:28px">
-    <p style="font-size:1.25rem"><span style="font-size:1.4rem">&#129302;</span> &ensp;<span class="white">My AI agent will judge.</span><br>It will review all tagged photos and pick the best one — based on its own taste. The winner gets the consulting session.</p>
-  </div>
-  <p class="lead" style="color:var(--dim);margin-top:16px;margin-bottom:0">Post now — winner announced at the end of the workshop.</p>
-</div>
-
-<!-- ======== SECTION: SETUP ======== -->
-<div class="slide divider">
-  <div class="part-label">Part 2</div>
-  <h1>Setup</h1>
-  <div class="sub" style="color:var(--dim)">Tools, groups, and 7 steps to a running agent</div>
-</div>
-
-<!-- ======== BASICS: TOOLS ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Basics</div>
-  <h1>Tools You Need</h1>
-  <div class="sub">Set these up before we begin</div>
-  <div class="cards cards-4" style="max-width:740px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--teal)"><div class="card-icon">&#9000;&#65039;</div><h3>Warp Terminal</h3><p>Modern terminal app. Download at warp.dev</p></div>
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#128025;</div><h3>GitHub Account</h3><p>Register at github.com</p></div>
-    <div class="card" style="border-color:var(--blue)"><div class="card-icon">&#128274;</div><h3>1Password</h3><p>Store all tokens &amp; API keys safely</p></div>
-    <div class="card" style="border-color:var(--amber)"><div class="card-icon">&#128273;</div><h3>Model Provider Access</h3><p>You need API access or provider login for OpenAI, Anthropic, OpenRouter, or another supported model source</p></div>
-  </div>
-  <div class="callout"><p>Hermes connects to the model/provider you choose. <span class="white">No provider access = no agent.</span><br>API key, OpenRouter, or another supported login must be ready.</p></div>
-</div>
-
-<!-- ======== BASICS: AI ASSISTANT ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Basics</div>
-  <h1>Your AI Assistant</h1>
-  <div class="sub">Your second helper at this workshop</div>
-  <div class="cards cards-2" style="max-width:560px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--teal)"><div class="card-icon">&#129302;</div><h3>Claude</h3><p>claude.ai</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#128154;</div><h3>ChatGPT</h3><p>chatgpt.com</p></div>
-  </div>
-  <p class="big-quote">Stuck on a step? <span class="accent">Ask your AI first.</span></p>
-  <div class="callout"><p>Keep Claude or ChatGPT open in a second tab at all times.<br>Paste the error, describe what you're trying to do — it will guide you faster than waiting.</p></div>
-</div>
-
-<!-- ======== DISCLAIMER: CLAUDE + OPENCLAW ======== -->
-<div class="slide">
-  <div class="badge badge-amber">Important Update</div>
-  <h1>Claude + Hermes</h1>
-  <div class="sub">Using Claude as Hermes' model provider</div>
-  <div class="cards cards-2" style="max-width:640px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--error)">
-      <div class="card-icon">&#9940;</div>
-      <h3>Subscriptions blocked</h3>
-      <p>A Claude chat subscription alone is <strong style="color:var(--error)">not enough</strong> for Hermes. Hermes needs API/provider access, not just the claude.ai app.</p>
-    </div>
-    <div class="card" style="border-color:var(--amber)">
-      <div class="card-icon">&#128176;</div>
-      <h3>Still possible via API</h3>
-      <p>You can use Claude with Hermes through:<br>&bull; <strong style="color:var(--white)">Anthropic API key</strong><br>&bull; <strong style="color:var(--white)">OpenRouter</strong> or another supported provider layer</p>
-    </div>
-  </div>
-  <div class="callout callout-amber"><p><span class="white">For today's workshop:</span> use whichever provider you already have working API access for. If you want Claude inside Hermes, make sure you have Anthropic API or a supported provider path ready.</p></div>
-</div>
-
-<!-- ======== ROADMAP ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Roadmap</div>
-  <h1>7 Steps</h1>
-  <div class="sub">Progress matters more than speed</div>
-  <ul class="items">
-    <li><span class="dot"></span><span class="accent">1</span>&ensp;Create Server &rarr; <span class="accent">2</span>&ensp;Connect SSH &rarr; <span class="accent">3</span>&ensp;Install Hermes</li>
-    <li><span class="dot"></span><span class="accent">4</span>&ensp;Onboarding &rarr; <span class="accent">5</span>&ensp;Check Interface</li>
-    <li><span class="dot"></span><span class="accent">6</span>&ensp;Connect Telegram &rarr; <span class="accent">7</span>&ensp;Launch Your Agent</li>
-  </ul>
-</div>
-
-<!-- ======== PREFLIGHT ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Preflight</div>
-  <h1>Quick Check</h1>
-  <div class="sub">Ready?</div>
-  <ul class="items">
-    <li><span class="dot"></span>Laptop + Internet</li>
-    <li><span class="dot"></span>Warp installed</li>
-    <li><span class="dot"></span>GitHub account</li>
-    <li><span class="dot"></span>1Password ready</li>
-    <li><span class="dot"></span>Telegram account</li>
-    <li><span class="dot"></span>Claude / ChatGPT open in a tab</li>
-  </ul>
-</div>
-
-<!-- ======== FORM GROUPS ======== -->
-<div class="slide group">
-  <div class="group-icon">&#128101;</div>
-  <h1>Form Your Groups</h1>
-  <div class="sub">Your table = your team</div>
-  <div class="cards cards-3" style="max-width:720px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#128101;</div><h3>Your Table</h3><p>The people at your table are your group for the rest of the workshop</p></div>
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#128081;</div><h3>Pick a Captain</h3><p>Who has used a terminal before? You are the captain.</p></div>
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#129309;</div><h3>Help Each Other</h3><p>If you pass a step first — help your neighbor. No one left behind.</p></div>
-  </div>
-  <p class="big-quote">From now on, every step is a <span class="accent">group effort</span>.</p>
-</div>
-
-<!-- ======== GROUP RULES ======== -->
-<div class="slide group">
-  <div class="group-icon">&#128218;</div>
-  <h1>How Groups Work</h1>
-  <div class="sub">Simple rules</div>
-  <div class="cards cards-2" style="max-width:640px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#9989;</div><h3>Finished a step?</h3><p>Look left, look right. Help someone who is stuck.</p></div>
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#128680;</div><h3>Whole group stuck?</h3><p>Captain raises hand. I come to you.</p></div>
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#9200;</div><h3>Group done?</h3><p>Wait for the checkpoint slide. Do not rush ahead alone.</p></div>
-    <div class="card" style="border-color:var(--purple)"><div class="card-icon">&#127942;</div><h3>Goal</h3><p>Entire table finishes together. Not fastest person — fastest table.</p></div>
-  </div>
-</div>
-
-<!-- ======== WHY A SERVER ======== -->
-<div class="slide">
-  <h1>Why Not Your Laptop?</h1>
-  <div class="sub">Why we install Hermes on a remote server</div>
-  <div class="cards cards-2" style="max-width:640px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--error)">
-      <div class="card-icon">&#128187;</div>
-      <h3>Your Laptop</h3>
-      <p>One wrong command can break your system, delete files, or expose your data. Hard to undo.</p>
-    </div>
-    <div class="card" style="border-color:var(--green)">
-      <div class="card-icon">&#9729;&#65039;</div>
-      <h3>Remote Server</h3>
-      <p>Isolated sandbox. Break it — delete it — start fresh. Your personal machine stays untouched.</p>
-    </div>
-  </div>
-  <div class="cards cards-3" style="max-width:720px;margin:0 auto">
-    <div class="card" style="padding:16px 20px"><div class="card-icon">&#128274;</div><h3>Security</h3><p>Hermes can use shell, files, browser, and external tools. On a server, this stays contained.</p></div>
-    <div class="card" style="padding:16px 20px"><div class="card-icon">&#128260;</div><h3>Disposable</h3><p>Messed up? Destroy the server in 30 seconds and create a new one. Zero risk.</p></div>
-    <div class="card" style="padding:16px 20px"><div class="card-icon">&#127760;</div><h3>Always Online</h3><p>Your agent runs 24/7. Close your laptop — the agent keeps working.</p></div>
-  </div>
-</div>
-
-<!-- ======== STEP 1 ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Step 1</div>
-  <h1>Create a Server</h1>
-  <div class="sub">Your first infrastructure step</div>
-  <p class="lead">Choose a provider &rarr; Create an instance &rarr; Choose the OS &rarr; Get your IP</p>
-  <p class="big-quote">Output: <span class="accent">your own remote machine</span></p>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-1"><input type="number" class="timer-input" id="ti-1" value="10" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer(1)">Start</button></div><div class="timer-display" id="td-1"></div><button class="timer-btn" id="tb-1" onclick="openTimer(1)">&#9202; Timer</button><button class="timer-stop" id="ts-1" onclick="stopTimer(1)">Stop</button></div>
-</div>
-
-<!-- ======== SLIDE 19: CHECKPOINT ======== -->
-<div class="slide checkpoint">
-  <div class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <h1>You Have a Server</h1>
-  <div class="sub">Checkpoint</div>
-  <p class="big-quote">&#10003; Server &ensp; &#10003; Credentials &ensp; &#10003; IP Address</p>
-  <div class="callout"><p>If not &mdash; fix it <span class="white">now</span>, not later.</p></div>
-</div>
-
-<!-- ======== GROUP CHECK 1 ======== -->
-<div class="slide group">
-  <div class="group-icon">&#128101;</div>
-  <div class="badge badge-purple">Group Check</div>
-  <h1>Check Your Table</h1>
-  <div class="sub">Does everyone have a server?</div>
-  <p class="big-quote">&#10003; Server &ensp; &#10003; Credentials &ensp; &#10003; IP</p>
-  <div class="callout" style="border-left-color:var(--purple)"><p>If someone at your table is stuck — <span class="white">help them now</span>.<br>Captain: raise hand only if the whole table is blocked.</p></div>
-</div>
-
-<!-- ======== SLIDE 20: STEP 2 ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Step 2</div>
-  <h1>Connect with SSH</h1>
-  <div class="sub">Log into your remote machine</div>
-  <p class="big-quote">Open terminal &rarr; Enter command &rarr; <span class="accent">You're in</span></p>
-  <div class="callout"><p>It feels technical, but it is just logging into another computer.</p></div>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-2"><input type="number" class="timer-input" id="ti-2" value="7" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer(2)">Start</button></div><div class="timer-display" id="td-2"></div><button class="timer-btn" id="tb-2" onclick="openTimer(2)">&#9202; Timer</button><button class="timer-stop" id="ts-2" onclick="stopTimer(2)">Stop</button></div>
-</div>
-
-<!-- ======== CLAUDE CLI ======== -->
-<div class="slide">
-  <div class="badge badge-teal">Pro Tip</div>
-  <h1>Use Claude in Your Terminal</h1>
-  <div class="sub">Let AI do the typing for you</div>
-  <div class="cards cards-2" style="max-width:640px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--teal)">
-      <div class="card-icon">&#9000;&#65039;</div>
-      <h3>What is CLI?</h3>
-      <p><strong style="color:var(--teal)">Command Line Interface</strong> — a way to interact with your computer by typing text commands instead of clicking buttons. Your terminal is a CLI.</p>
-    </div>
-    <div class="card" style="border-color:var(--teal)">
-      <div class="card-icon">&#129302;</div>
-      <h3>Claude in Terminal</h3>
-      <p>Type <strong style="color:var(--teal)">claude</strong> in your terminal to start. Then ask it to run commands for you — SSH, install, configure — on your behalf.</p>
-    </div>
-  </div>
-  <div class="callout" style="border-left-color:var(--teal)"><p>Not sure what command to type? <span class="white">Ask Claude to do it for you</span> right inside the terminal.<br>This is the fastest way to move through setup steps.</p></div>
-</div>
-
-<!-- ======== SLIDE 21: CHECKPOINT ======== -->
-<div class="slide checkpoint">
-  <div class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <h1>You Are Inside the Server</h1>
-  <div class="sub">Checkpoint</div>
-  <p class="big-quote">You crossed one of the <span class="accent">biggest beginner barriers</span>.</p>
-</div>
-
-<!-- ======== GROUP CHECK 2 ======== -->
-<div class="slide group">
-  <div class="group-icon">&#128101;</div>
-  <div class="badge badge-purple">Group Check</div>
-  <h1>Check Your Table</h1>
-  <div class="sub">Is everyone connected via SSH?</div>
-  <p class="big-quote">Everyone sees the <span class="accent">server prompt</span>?</p>
-  <div class="callout" style="border-left-color:var(--purple)"><p>This is the hardest step for beginners.<br><span class="white">Captains — walk your table through it.</span></p></div>
-</div>
-
-<!-- ======== SLIDE 22: STEP 3 ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Step 3</div>
-  <h1>Install Hermes</h1>
-  <div class="sub">From plain machine to agent-ready</div>
-  <p class="lead">Download components &rarr; Setup environment &rarr; Ready for onboarding</p>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-3"><input type="number" class="timer-input" id="ti-3" value="10" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer(3)">Start</button></div><div class="timer-display" id="td-3"></div><button class="timer-btn" id="tb-3" onclick="openTimer(3)">&#9202; Timer</button><button class="timer-stop" id="ts-3" onclick="stopTimer(3)">Stop</button></div>
-</div>
-
-<!-- ======== SLIDE 23: CHECKPOINT ======== -->
-<div class="slide checkpoint">
-  <div class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <h1>Installation Finished</h1>
-  <div class="sub">Checkpoint</div>
-  <div class="callout callout-amber"><p>If something failed &mdash; <span class="white">do not improvise</span>. Normal troubleshooting point.</p></div>
-</div>
-
-<!-- ======== GROUP CHECK 3 ======== -->
-<div class="slide group">
-  <div class="group-icon">&#128101;</div>
-  <div class="badge badge-purple">Group Check</div>
-  <h1>Check Your Table</h1>
-  <div class="sub">Did installation finish for everyone?</div>
-  <p class="big-quote">No errors? Ready for <span class="accent">onboarding</span>?</p>
-  <div class="callout" style="border-left-color:var(--purple)"><p>If someone got an error — <span class="white">do not skip it</span>.<br>Show your screen to the captain. Solve it together.</p></div>
-</div>
-
-<!-- ======== SLIDE 24: STEP 4 ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Step 4</div>
-  <h1>Onboarding</h1>
-  <div class="sub">From installed to configured</div>
-  <p class="lead">Tokens &middot; Config &middot; Channels &middot; Ready</p>
-  <div class="callout"><p>The system starts asking questions &mdash; that's normal.</p></div>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-4"><input type="number" class="timer-input" id="ti-4" value="10" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer(4)">Start</button></div><div class="timer-display" id="td-4"></div><button class="timer-btn" id="tb-4" onclick="openTimer(4)">&#9202; Timer</button><button class="timer-stop" id="ts-4" onclick="stopTimer(4)">Stop</button></div>
-</div>
-
-<!-- ======== SLIDE 25: CHECKPOINT ======== -->
-<div class="slide checkpoint">
-  <div class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <h1>Hermes Is Running</h1>
-  <div class="sub">Checkpoint</div>
-  <p class="big-quote">You now have a <span class="accent">live system</span>.</p>
-</div>
-
-<!-- ======== GROUP CHECK 4 ======== -->
-<div class="slide group">
-  <div class="group-icon">&#128101;</div>
-  <div class="badge badge-purple">Group Check</div>
-  <h1>Check Your Table</h1>
-  <div class="sub">Is Hermes running for everyone?</div>
-  <p class="big-quote">System active? <span class="accent">Moving to the interface.</span></p>
-  <div class="callout" style="border-left-color:var(--purple)"><p>Almost there. The hard infrastructure part is behind you.</p></div>
-</div>
-
-<!-- ======== SLIDE 26: STEP 5 ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Step 5</div>
-  <h1>Check the Interface</h1>
-  <div class="sub">See it, not just the terminal</div>
-  <p class="big-quote">A visible interface makes it <span class="accent">feel real</span>.</p>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-5"><input type="number" class="timer-input" id="ti-5" value="5" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer(5)">Start</button></div><div class="timer-display" id="td-5"></div><button class="timer-btn" id="tb-5" onclick="openTimer(5)">&#9202; Timer</button><button class="timer-stop" id="ts-5" onclick="stopTimer(5)">Stop</button></div>
-</div>
-
-<!-- ======== SLIDE 27: CHECKPOINT ======== -->
-<div class="slide checkpoint">
-  <div class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <h1>Hermes UI Works</h1>
-  <div class="sub">Checkpoint</div>
-  <p class="big-quote">You have a <span class="accent">working system base</span>.</p>
-</div>
-
-<!-- ======== GROUP CHECK 5 ======== -->
-<div class="slide group">
-  <div class="group-icon">&#128101;</div>
-  <div class="badge badge-purple">Group Check</div>
-  <h1>Check Your Table</h1>
-  <div class="sub">Does the Hermes interface open for everyone?</div>
-  <p class="big-quote">If someone's Hermes interface doesn't load — <span class="accent">check together</span>.</p>
-  <div class="callout" style="border-left-color:var(--purple)"><p>Common issue: firewall or wrong port.<br><span class="white">Captain — compare URLs across the table.</span></p></div>
-</div>
-
-<!-- ======== SLIDE 28: STEP 6 ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Step 6</div>
-  <h1>Connect Telegram</h1>
-  <div class="sub">Give your agent a real channel</div>
-  <p class="big-quote">"Something on a server" &rarr; <span class="accent">"Something you can talk to"</span></p>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-6"><input type="number" class="timer-input" id="ti-6" value="7" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer(6)">Start</button></div><div class="timer-display" id="td-6"></div><button class="timer-btn" id="tb-6" onclick="openTimer(6)">&#9202; Timer</button><button class="timer-stop" id="ts-6" onclick="stopTimer(6)">Stop</button></div>
-</div>
-
-<!-- ======== CHECKPOINT: TELEGRAM ======== -->
-<div class="slide checkpoint">
-  <div class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <h1>Telegram Connected</h1>
-  <div class="sub">Checkpoint</div>
-  <p class="big-quote">Your bot is live in Telegram. <span class="accent">One step left.</span></p>
-</div>
-
-<!-- ======== GROUP CHECK 6: TELEGRAM ======== -->
-<div class="slide group">
-  <div class="group-icon">&#128101;</div>
-  <div class="badge badge-purple">Group Check</div>
-  <h1>Check Your Table</h1>
-  <div class="sub">Does everyone have a Telegram bot connected?</div>
-  <p class="big-quote">Bot responds in Telegram? <span class="accent">You're almost done.</span></p>
-  <div class="callout" style="border-left-color:var(--purple)"><p>Telegram bot setup can be tricky.<br><span class="white">Captain — make sure everyone got the bot token right.</span></p></div>
-</div>
-
-<!-- ======== SLIDE 29: STEP 7 ======== -->
-<div class="slide">
-  <div class="badge badge-blue">Step 7</div>
-  <h1>Create the First Agent</h1>
-  <div class="sub">The simplest useful version</div>
-  <p class="lead">Give it a role &rarr; Set behavior &rarr; Test it</p>
-  <div class="callout"><p>Do not build the perfect agent. Build <span class="white">one that works</span>.</p></div>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-7"><input type="number" class="timer-input" id="ti-7" value="10" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer(7)">Start</button></div><div class="timer-display" id="td-7"></div><button class="timer-btn" id="tb-7" onclick="openTimer(7)">&#9202; Timer</button><button class="timer-stop" id="ts-7" onclick="stopTimer(7)">Stop</button></div>
-</div>
-
-<!-- ======== SLIDE 30: CHECKPOINT — FIRST RESULT ======== -->
-<div class="slide checkpoint">
-  <div class="check-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <h1>Your Agent Responds</h1>
-  <div class="sub">Key milestone</div>
-  <p class="big-quote">&#10003; Infrastructure &ensp; &#10003; Platform &ensp; &#10003; Environment &ensp; &#10003; <span class="accent">Working Agent</span></p>
-  <p class="lead">Not theory. A real build.</p>
-</div>
-
-<!-- ======== GROUP CHECK FINAL ======== -->
-<div class="slide group">
-  <div class="group-icon">&#127881;</div>
-  <div class="badge badge-purple">Final Group Check</div>
-  <h1>Check Your Table</h1>
-  <div class="sub">Does everyone have a working agent?</div>
-  <p class="big-quote">&#129302; Every person at your table got a <span class="accent">response</span>?</p>
-  <div class="callout" style="border-left-color:var(--purple)"><p>If yes — <span class="white">congratulations, your whole table shipped today</span>.<br>If someone is close — help them cross the finish line.</p></div>
-</div>
-
-<!-- ======== SLIDE 31: TROUBLESHOOTING ======== -->
-<div class="slide">
-  <div class="badge badge-amber">Troubleshooting</div>
-  <h1>If Something Breaks</h1>
-  <div class="sub">That does not mean you failed</div>
-  <p class="lead">Common issues: server/SSH access, tokens/config, channel connection.</p>
-  <p class="big-quote">Not panic. <span class="accent">Structured troubleshooting.</span></p>
-  <div class="callout callout-amber"><p>Ask your AI assistant first. Show your screen to the captain. Most issues are one typo away from fixed.</p></div>
-</div>
-
-<!-- ======== BREAK 2 ======== -->
-<div class="slide" style="background:var(--bg2)">
-  <div style="font-size:4rem;margin-bottom:20px">&#9749;</div>
-  <h1>Break</h1>
-  <div class="sub">Part 2 done — you have a working agent</div>
-  <p class="lead">Server, Hermes, Telegram, agent — all running.<br>Next up: make it yours.</p>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-brk2"><input type="number" class="timer-input" id="ti-brk2" value="10" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer('brk2')">Start</button></div><div class="timer-display" id="td-brk2"></div><button class="timer-btn" id="tb-brk2" onclick="openTimer('brk2')">&#9202; 10 min</button><button class="timer-stop" id="ts-brk2" onclick="stopTimer('brk2')">Stop</button></div>
-  <div class="callout" style="margin-top:28px"><p>Last part: <span class="white">Free Build</span>. Customize your agent, demo to the room, contest winner.</p></div>
-</div>
-
-<!-- ======== SECTION: FREE BUILD ======== -->
-<div class="slide divider">
-  <div class="part-label">Part 3</div>
-  <h1>Free Build</h1>
-  <div class="sub" style="color:var(--dim)">Your agent. Your idea. Your time.</div>
-</div>
-
-<!-- ======== FREE BUILD: YOUR IDEA ======== -->
-<div class="slide" style="background:linear-gradient(160deg,rgba(0,172,71,.06) 0%,transparent 50%)">
-  <div class="badge badge-green">Free Build</div>
-  <h1>Remember Your Idea?</h1>
-  <div class="sub">From the start of the workshop</div>
-  <p class="big-quote">You named what you wanted to build.<br>Now you have a working agent. <span class="accent">Make it yours.</span></p>
-</div>
-
-<!-- ======== FREE BUILD: FRAMEWORK ======== -->
-<div class="slide">
-  <div class="badge badge-green">Free Build</div>
-  <h1>The Formula</h1>
-  <div class="sub">How to customize your agent</div>
-  <div class="arch">
-    <div class="node node-green"><div class="n-label">Step 1</div><div class="n-name">Change the Role</div></div>
-    <div class="arrow">&rarr;</div>
-    <div class="node node-green"><div class="n-label">Step 2</div><div class="n-name">Rewrite the Prompt</div></div>
-    <div class="arrow">&rarr;</div>
-    <div class="node node-green"><div class="n-label">Step 3</div><div class="n-name">Test It</div></div>
-    <div class="arrow">&rarr;</div>
-    <div class="node node-green"><div class="n-label">Step 4</div><div class="n-name">Iterate</div></div>
-  </div>
-  <div class="callout"><p>Ask Claude or ChatGPT: <span class="white">"Write me a system prompt for an agent that does X"</span> — then paste it into Hermes.</p></div>
-</div>
-
-<!-- ======== FREE BUILD: GO ======== -->
-<div class="slide" style="background:linear-gradient(160deg,rgba(0,172,71,.06) 0%,transparent 50%)">
-  <div class="badge badge-green">Free Build</div>
-  <h1>Build Time</h1>
-  <div class="sub">Work with your table</div>
-  <div class="cards cards-3" style="max-width:660px;margin-left:auto;margin-right:auto">
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#129302;</div><h3>Customize</h3><p>New role, new prompt, new behavior</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#128101;</div><h3>Collaborate</h3><p>Help each other, compare results</p></div>
-    <div class="card" style="border-color:var(--green)"><div class="card-icon">&#128172;</div><h3>Use AI</h3><p>Claude / ChatGPT for prompt ideas</p></div>
-  </div>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-free"><input type="number" class="timer-input" id="ti-free" value="20" min="1" max="60"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer('free')">Start</button></div><div class="timer-display" id="td-free"></div><button class="timer-btn" id="tb-free" onclick="openTimer('free')">&#9202; 20 min</button><button class="timer-stop" id="ts-free" onclick="stopTimer('free')">Stop</button></div>
-</div>
-
-<!-- ======== DEMO TIME ======== -->
-<div class="slide">
-  <div class="badge badge-amber">Demo Time</div>
-  <h1>Show What You Built</h1>
-  <div class="sub">2–3 volunteers. 2 minutes each.</div>
-  <p class="big-quote">What does it do? &rarr; Show it live &rarr; <span class="accent">What's next?</span></p>
-  <div class="timer-wrap"><div class="timer-controls" id="tc-demo"><input type="number" class="timer-input" id="ti-demo" value="10" min="1" max="30"><span class="timer-label">min</span><button class="timer-start" onclick="startTimer('demo')">Start</button></div><div class="timer-display" id="td-demo"></div><button class="timer-btn" id="tb-demo" onclick="openTimer('demo')">&#9202; 10 min</button><button class="timer-stop" id="ts-demo" onclick="stopTimer('demo')">Stop</button></div>
-</div>
-
-<!-- ======== CONTEST WINNER ======== -->
-<div class="slide" style="background:radial-gradient(ellipse at 50% 50%,rgba(232,145,58,.07) 0%,transparent 60%)">
-  <div style="font-size:4rem;margin-bottom:16px">&#127942;</div>
-  <h1>Contest Winner</h1>
-  <div class="sub">The AI agent has chosen</div>
-  <p class="big-quote">Best photo tagged <span class="accent">@aram_shakhbandaryan</span></p>
-  <div class="callout" style="margin-top:20px"><p style="font-size:1.3rem">Prize: <span class="white">1 hour free consulting</span> — AI agents, product, architecture. 1-on-1 with Aram.</p></div>
-</div>
-
-<!-- ======== SECTION: CLOSING ======== -->
-<div class="slide divider">
-  <div class="part-label">Closing</div>
-  <h1>What's Next</h1>
-  <div class="sub" style="color:var(--dim)">Your new foundation</div>
-</div>
-
-<!-- ======== SLIDE 33: WHAT YOU HAVE ======== -->
-<div class="slide">
-  <h1>What You Have Now</h1>
-  <div class="sub">Your foundation</div>
-  <p class="big-quote">Server &middot; Environment &middot; Interface &middot; Channel &middot; Agent</p>
-  <p class="lead"><span class="accent">Ready to iterate.</span> Everything you need to keep building.</p>
-</div>
-
-<!-- ======== SLIDE 34: NEXT STEPS ======== -->
-<div class="slide">
-  <h1>After the Workshop</h1>
-  <div class="sub">Small iteration beats big ambition</div>
-  <ul class="items">
-    <li><span class="dot"></span>Improve your prompt</li>
-    <li><span class="dot"></span>Test one real use case</li>
-    <li><span class="dot"></span>Change the role of your agent</li>
-    <li><span class="dot"></span>Try a real workflow</li>
-  </ul>
-</div>
-
-<!-- ======== SLIDE 35: CLOSING CTA ======== -->
-<div class="slide" style="background:radial-gradient(ellipse at 50% 50%,rgba(232,145,58,.07) 0%,transparent 60%)">
-  <h1>Keep Building After This Workshop</h1>
-  <div class="sub">This is just your starting point</div>
-  <div class="qr-layout">
-    <div class="qr-frame">
-      <img src="qr-community.jpg" alt="Join t.me/armvibecode" style="width:180px;height:180px">
-    </div>
-    <div class="qr-right">
-      <p class="lead" style="text-align:left;max-width:none">If you want to continue:</p>
-      <ul class="items" style="align-items:flex-start">
-        <li><span class="dot"></span>Build better agents</li>
-        <li><span class="dot"></span>Ask questions</li>
-        <li><span class="dot"></span>See how others are doing it</li>
-        <li><span class="dot"></span>Join future workshops</li>
-      </ul>
-      <p class="big-quote" style="text-align:left;margin-top:20px">t.me/armvibecode</p>
-      <p class="lead" style="text-align:left;max-width:none;color:var(--dim)">Everything continues there.</p>
-    </div>
-  </div>
-</div>
-
-<a class="branding" href="https://t.me/armvibecode" target="_blank">
-  <div class="branding-logo"><img src="agentic-evn-logo.jpg" alt="Agentic EVN"></div>
-  <div class="branding-text">
-    <span class="branding-name">AI for Founders &rarr; t.me/armvibecode</span>
-    <span class="branding-tagline">More workshops &amp; materials &rarr; t.me/armvibecode</span>
-  </div>
-</a>
-
-<div class="progress" id="prog"></div>
-<div class="counter" id="ctr"></div>
-<div class="nav">
-  <button onclick="prev()" aria-label="Previous">&#8592;</button>
-  <button onclick="next()" aria-label="Next">&#8594;</button>
-</div>
-
-<script>
-const S=document.querySelectorAll('.slide'),T=S.length;let C=0;
-function go(i,updateHash=true){if(i<0||i>=T)return;S[C].classList.remove('active');C=i;S[C].classList.add('active');
-document.getElementById('prog').style.width=((C+1)/T*100)+'%';
-document.getElementById('ctr').textContent=(C+1)+' / '+T;
-if(updateHash)history.replaceState(null,null,'#'+(C+1))}
-function next(){go(C+1)}function prev(){go(C-1)}
-document.addEventListener('keydown',e=>{
-if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next()}
-else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev()}
-else if(e.key==='Home'){e.preventDefault();go(0)}
-else if(e.key==='End'){e.preventDefault();go(T-1)}});
-let tx=0;
-document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].screenX},{passive:true});
-document.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].screenX;if(Math.abs(d)>50){d>0?next():prev()}},{passive:true});
-window.addEventListener('hashchange',()=>{const n=parseInt(location.hash.slice(1));if(n>=1&&n<=T)go(n-1,false)});
-const startSlide=parseInt(location.hash.slice(1))||1;go(Math.max(0,Math.min(startSlide-1,T-1)));
-
-// Timer system
-const timers = {};
-function openTimer(n) {
-  document.getElementById('tc-'+n).classList.add('active');
-  document.getElementById('tb-'+n).style.display='none';
-}
-function startTimer(n) {
-  const mins = parseInt(document.getElementById('ti-'+n).value) || 5;
-  let secs = mins * 60;
-  const display = document.getElementById('td-'+n);
-  const controls = document.getElementById('tc-'+n);
-  const stopBtn = document.getElementById('ts-'+n);
-  controls.classList.remove('active');
-  display.classList.add('active');
-  stopBtn.classList.add('active');
-  function tick() {
-    const m = Math.floor(secs / 60);
-    const s = secs % 60;
-    display.textContent = m + ':' + (s < 10 ? '0' : '') + s;
-    if (secs <= 0) {
-      clearInterval(timers[n]);
-      display.style.color = 'var(--amber)';
-      display.textContent = "Time's up!";
-      stopBtn.classList.remove('active');
-      return;
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const progress = document.getElementById('progress');
+    const counter = document.getElementById('counter');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    let current = 0;
+
+    function render(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+      history.replaceState(null, '', `#${current + 1}`);
+      document.title = `AI for Founders — ${slides[current].dataset.title}`;
     }
-    if (secs <= 30) display.style.color = 'var(--amber)';
-    else display.style.color = 'var(--white)';
-    secs--;
-  }
-  tick();
-  timers[n] = setInterval(tick, 1000);
-}
-function stopTimer(n) {
-  clearInterval(timers[n]);
-  document.getElementById('td-'+n).classList.remove('active');
-  document.getElementById('td-'+n).style.color='';
-  document.getElementById('ts-'+n).classList.remove('active');
-  document.getElementById('tb-'+n).style.display='';
-}
-</script>
+
+    function fromHash() {
+      const n = parseInt(window.location.hash.replace('#', ''), 10);
+      if (!Number.isNaN(n) && n >= 1 && n <= slides.length) render(n - 1);
+      else render(0);
+    }
+
+    prev.addEventListener('click', () => render(current - 1));
+    next.addEventListener('click', () => render(current + 1));
+    window.addEventListener('hashchange', fromHash);
+    window.addEventListener('keydown', (e) => {
+      if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); render(current + 1); }
+      if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); render(current - 1); }
+      if (e.key === 'Home') { e.preventDefault(); render(0); }
+      if (e.key === 'End') { e.preventDefault(); render(slides.length - 1); }
+    });
+
+    fromHash();
+  </script>
 </body>
 </html>
