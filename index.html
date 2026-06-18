@@ -74,7 +74,7 @@
     .eyebrow {
       font-family: 'Barlow', sans-serif;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1;
       letter-spacing: 0.22em;
       text-transform: uppercase;
@@ -137,7 +137,7 @@
       background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 20px;
+      padding: 16px;
       box-shadow: var(--shadow);
     }
 
@@ -155,7 +155,7 @@
     .metric {
       display: grid;
       grid-template-columns: 50px 1fr;
-      gap: 12px;
+      gap: 10px;
       align-items: start;
       padding: 10px 0;
       border-top: 1px solid rgba(255,255,255,0.08);
@@ -275,7 +275,7 @@
     }
 
     .rail-step h3 {
-      font-size: 18px;
+      font-size: 16px;
       margin-bottom: 2px;
     }
 
@@ -306,7 +306,7 @@
     .logic .node p { color: var(--muted); font-size: 13px; line-height: 1.28; }
 
     .footer-note {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--muted-2);
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -351,7 +351,7 @@
       border: 1px solid var(--border);
       background: rgba(17,17,17,0.9);
       color: var(--text);
-      font-size: 20px;
+      font-size: 17px;
       cursor: pointer;
     }
 
@@ -363,6 +363,156 @@
     .slide-hero .canvas { gap: 32px; }
     .slide-hero .lede { max-width: 40ch; }
     .slide-hero .panel { align-self: stretch; }
+
+
+    .term-equation {
+      display: grid;
+      grid-template-columns: 0.85fr 80px 1.15fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .term-big {
+      min-height: 238px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-radius: 22px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .term-big.dark {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      color: var(--text);
+    }
+
+    .term-big.accent {
+      background: linear-gradient(180deg, rgba(249,99,0,0.94), rgba(230,88,0,0.96));
+      color: #fff;
+      border-color: rgba(249,99,0,0.7);
+    }
+
+    .term-big h3 {
+      font-size: clamp(32px, 3.4vw, 46px);
+      line-height: 0.95;
+      margin-bottom: 12px;
+      color: inherit;
+    }
+
+    .term-big p {
+      font-size: 17px;
+      line-height: 1.25;
+      color: inherit;
+      max-width: 16ch;
+    }
+
+    .equals {
+      font-family: 'Barlow', sans-serif;
+      font-size: clamp(52px, 6vw, 84px);
+      line-height: 1;
+      text-align: center;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .term-system {
+      border-radius: 22px;
+      border: 1px solid rgba(249,99,0,0.38);
+      background: rgba(255,255,255,0.02);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .term-system h3 {
+      font-size: clamp(30px, 3.3vw, 44px);
+      margin-bottom: 4px;
+    }
+
+    .term-system .mini {
+      margin-bottom: 18px;
+    }
+
+    .term-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .term-chip {
+      border: 1px solid rgba(249,99,0,0.38);
+      border-radius: 18px;
+      background: var(--text);
+      color: var(--black);
+      padding: 18px 14px;
+      text-align: center;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Barlow', sans-serif;
+      font-size: 18px;
+      line-height: 1.05;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .term-compare {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .term-compare .panel {
+      min-height: 164px;
+    }
+
+    .term-compare .label {
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .term-compare h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .term-usecase {
+      margin-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .term-usecase strong {
+      color: var(--text);
+    }
+
+    @media (max-height: 700px) {
+      .slide.term-slide { padding-top: 24px; padding-bottom: 70px; }
+      .slide.term-slide .canvas { gap: 10px; min-height: calc(100vh - 96px); max-height: calc(100vh - 96px); justify-content: flex-start; }
+      .slide.term-slide h2 { font-size: clamp(22px, 2.6vw, 34px); line-height: 0.95; }
+      .slide.term-slide .eyebrow { margin-bottom: 10px; }
+      .slide.term-slide .term-equation { gap: 10px; grid-template-columns: 0.8fr 58px 1.2fr; }
+      .slide.term-slide .term-big { min-height: 180px; padding: 14px; }
+      .slide.term-slide .term-big h3 { font-size: clamp(28px, 3vw, 40px); margin-bottom: 8px; }
+      .slide.term-slide .term-big p { font-size: 15px; }
+      .slide.term-slide .equals { font-size: clamp(36px, 4vw, 56px); }
+      .slide.term-slide .term-system { padding: 12px; }
+      .slide.term-slide .term-system h3 { font-size: clamp(22px, 2.3vw, 30px); }
+      .slide.term-slide .term-system .mini { margin-bottom: 10px; font-size: 13px; }
+      .slide.term-slide .term-grid { gap: 8px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .slide.term-slide .term-chip { min-height: 54px; padding: 10px 8px; font-size: 13px; }
+      .slide.term-slide .term-compare { gap: 10px; }
+      .slide.term-slide .term-compare .panel { min-height: 132px; padding: 12px; }
+      .slide.term-slide .term-compare h3 { font-size: 20px; margin-bottom: 6px; }
+      .slide.term-slide .term-usecase { margin-top: 10px; padding-top: 8px; font-size: 12px; }
+    }
 
     @media (max-width: 980px) {
       .slide { padding: 32px 24px 86px; }
@@ -549,10 +699,86 @@
       </div>
     </section>
 
+
+    <section class="slide term-slide" data-title="Basic term: model">
+      <div class="canvas">
+        <div class="eyebrow">Basic term</div>
+        <h2>Model = the intelligence</h2>
+        <div class="term-equation">
+          <div class="term-big accent">
+            <h3>Model</h3>
+            <p>The intelligence.</p>
+          </div>
+          <div class="equals">=</div>
+          <div class="term-system">
+            <h3>What it gives you</h3>
+            <p class="mini">Write, summarize, compare, explain.</p>
+            <div class="term-grid">
+              <div class="term-chip">Research</div>
+              <div class="term-chip">Writing</div>
+              <div class="term-chip">Analysis</div>
+              <div class="term-chip">Decisions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide term-slide" data-title="Basic term: agent">
+      <div class="canvas">
+        <div class="eyebrow">Basic term</div>
+        <h2>Agent = model + system around it</h2>
+        <div class="term-equation">
+          <div class="term-big dark">
+            <h3>Agent</h3>
+            <p>A model working in a role.</p>
+          </div>
+          <div class="equals">=</div>
+          <div class="term-system">
+            <h3>Everything around the model</h3>
+            <p class="mini">This is what founders design.</p>
+            <div class="term-grid">
+              <div class="term-chip">Instructions</div>
+              <div class="term-chip">Tools</div>
+              <div class="term-chip">Memory</div>
+              <div class="term-chip">Review</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide term-slide" data-title="Basic term: workflow">
+      <div class="canvas">
+        <div class="eyebrow">Basic term</div>
+        <h2>Prompt, agent, workflow</h2>
+        <div class="term-compare">
+          <div class="panel">
+            <span class="label">Level 1</span>
+            <h3>Prompt</h3>
+            <p>One ask. One output.</p>
+            <div class="term-usecase"><strong>Founder example:</strong> "Summarize this call" or "Draft this investor reply."</div>
+          </div>
+          <div class="panel dark">
+            <span class="label">Level 2</span>
+            <h3>Agent</h3>
+            <p>A role with context and tools.</p>
+            <div class="term-usecase"><strong>Founder example:</strong> research assistant, Telegram assistant, investor update assistant.</div>
+          </div>
+          <div class="panel">
+            <span class="label">Level 3</span>
+            <h3>Workflow</h3>
+            <p>A repeatable sequence of steps.</p>
+            <div class="term-usecase"><strong>Founder example:</strong> call → summary → next steps → follow-up.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="slide" data-title="Agentic workflows">
       <div class="canvas">
-        <div class="eyebrow">Agentic workflows</div>
-        <h2>Agentic workflows are where things get interesting</h2>
+        <div class="eyebrow">From terms to practice</div>
+        <h2>When these pieces start working together, leverage appears</h2>
         <div class="logic">
           <div class="node">
             <span class="label">Level 1</span>
@@ -567,15 +793,15 @@
           <div class="node">
             <span class="label">Level 3</span>
             <strong>Agent</strong>
-            <p>The system can act across tools and context.</p>
+            <p>The model can work inside a role with tools and context.</p>
           </div>
           <div class="node">
             <span class="label">Level 4</span>
             <strong>System</strong>
-            <p>Knowledge, tools, memory, and routines start compounding.</p>
+            <p>Multiple steps start working as one repeatable operating loop.</p>
           </div>
         </div>
-        <p class="lede" style="max-width:62ch;">The jump from chat to agent is not cosmetic. It changes what work can be delegated, repeated, and improved.</p>
+        <p class="lede" style="max-width:62ch;">The jump from chat to agent to workflow is what turns AI from a toy into founder leverage.</p>
       </div>
     </section>
 
@@ -636,7 +862,7 @@
             <ul class="list">
               <li><span class="bullet"></span><span>Understand why this matters now.</span></li>
               <li><span class="bullet"></span><span>See where AI creates founder leverage.</span></li>
-              <li><span class="bullet"></span><span>Understand why agentic workflows matter.</span></li>
+              <li><span class="bullet"></span><span>Understand the difference between a prompt, an agent, and a workflow.</span></li>
               <li><span class="bullet"></span><span>Start thinking in systems, not prompts.</span></li>
             </ul>
           </div>
